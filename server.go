@@ -11,7 +11,7 @@ import (
 func helloHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{
 
-		"message":"hello",
+		"message":"Nattanon Hello All",
 	})
 }
 
