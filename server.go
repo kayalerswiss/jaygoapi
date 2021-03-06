@@ -31,9 +31,21 @@ func getTodosHandler(c echo.Context) error {
 	for _, item := range todos {
 		items = append(items, item)
 	}
-
 	return c.JSON(http.StatusOK,items)
+}
 
+func createTodosHandler(e echo.Context) error{
+	t := Todo{}
+	if err := e.Bind(&t); err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	id := len(todos)
+	id++
+	t.ID = id
+	todos[t.ID] = &t
+
+	return e.JSON(http.StatusCreated, "create todo")
 }
 
 func main() {
@@ -41,11 +53,12 @@ func main() {
 	e := echo.New()
 
 	//Middleware
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	e.Use(middleware.Logger()) // แสดง Log ใน heroku ทุกครั้งที่มีการยิง
+	e.Use(middleware.Recover()) // ไม่ให้ server ดับ
 
 	e.GET("/hello" , helloHandler)
 	e.GET("/todos",getTodosHandler)
+	e.POST("/todos",createTodosHandler)
 
 	port := os.Getenv("PORT")
 	log.Println("port", port)
