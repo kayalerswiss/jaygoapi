@@ -16,5 +16,9 @@ func main() {
 
 	e := echo.New()
 	e.GET("/hello" , helloHandler)
-	e.Start(":1323") // list
+
+	port := os.Getenv("PORT")
+	log.Println("port", port)
+	e.Start(":" +port)
+	//e.Start(":1323") // list and server on 127.0.0.0:
 }
