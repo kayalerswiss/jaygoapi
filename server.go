@@ -10,7 +10,7 @@ import (
 )
 
 type Todo struct {
-	id int `json:"id"`
+	ID int `json:"id"`
 	Title string `json:"title"`
 	Status string `json:"status"`
 }
