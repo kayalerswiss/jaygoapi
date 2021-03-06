@@ -32,6 +32,8 @@ func getTodosHandler(c echo.Context) error {
 		items = append(items, item)
 	}
 
+	return c.JSON(http.StatusOK,items)
+
 }
 
 func main() {
