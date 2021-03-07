@@ -17,6 +17,7 @@ type Todo struct {
 
 var todos = map[int]*Todo{
 	1: &Todo{ID: 1, Title: "pay phone bills", Status:"active"},
+	2: &Todo{ID: 2, Title: "pay credit card", Status:"inactive"},
 }
 
 func helloHandler(c echo.Context) error {
@@ -62,6 +63,22 @@ func getTodoByIdHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK,t)
 }
 
+// ส่งค่าแบบ PUT (Update)
+func updateTodoByIdHandler(c echo.Context) error {
+	var id int
+	err := echo.PathParamsBinder(c).Int("id",&id).BindError()
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	t,ok := todos[id]
+	if !ok {
+		return c.JSON(http.StatusOK, map[int]string{})
+	}
+	return c.JSON(http.StatusOK,t)
+}
+
 func main() {
 
 	e := echo.New()
@@ -74,6 +91,11 @@ func main() {
 	e.GET("/todos",getTodosHandler)
 	e.GET("/todos/:id",getTodoByIdHandler)
 	e.POST("/todos",createTodosHandler)
+
+
+
+	e.PUT("/todos/:id",updateTodoByIdHandler)
+
 
 	port := os.Getenv("PORT")
 	log.Println("port", port)
